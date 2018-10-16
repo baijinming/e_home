@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
 import xhr from './utils/axios'
+import store from './store/store'
 
 Vue.use(VueAwesomeSwiper, /* { default global options } */)
 Vue.use(ElementUI)
@@ -18,6 +19,7 @@ Vue.prototype.$axios = xhr
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

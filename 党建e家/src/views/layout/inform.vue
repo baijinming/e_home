@@ -1,11 +1,11 @@
 <template>
   <div>
-    <Header :text="111"></Header>
-    <div class="news-item" v-for="(item, index) in info" :key="index" v-on:click="lookDetail(item.newsId)">
+    <Header :goback="false"></Header>
+    <div class="news-item" v-for="(item, index) in info" :key="index" @click="lookDetail(item.newsId)">
       <img :src="item.pic" alt="">
       <div class="text">
-        <p class="title">{{item.title}}</p>
-        <p class="time">{{item.currentTime}}</p>
+        <div class="title">{{item.title}}</div>
+        <div class="time">{{item.currentTime}}</div>
       </div>
     </div>
   </div>
@@ -33,38 +33,47 @@
         }
       },
       created() {
-        this.getData()
+        this.getData();
+        this.$store.commit('CHANGE_TITLE', '通知早知道')
+        this.$store.commit('CHANGE_BACK', false)
       }
     }
 </script>
 
 <style scoped lang="scss">
   .news-item {
-    height: 100px;
-    border-bottom: 1px solid #888;
+    height: 2rem;
+    width: 7.5rem;
+    border-bottom: 1px solid #e9e9e9;
     display: flex;
-    padding: 10px;
+    padding: 0.3rem 0.15rem;
     box-sizing: border-box;
 
     img {
-      height: 70px;
-      width: 70px;
-      margin-top: 5px;
+      height: 1.4rem;
+      width: 1.4rem;
     }
 
     .text {
-      margin-left: 20px;
+      height: 1.4rem;
+      width: 5.3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: 0 0 0 0.4rem;
 
       .title {
         font-size: 16px;
         color: #444;
-        margin-top: 5px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
       }
 
       .time {
         font-size: 12px;
         color: #666;
-        margin-top: 10px;
       }
     }
   }

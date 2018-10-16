@@ -18,8 +18,13 @@ export default new Router({
         },
         {
           path: 'inform',
-          name: '通知早知道',
+          name: 'inform',
           component: () => import('@/views/layout/inform')
+        },
+        {
+          path: 'party',
+          name: 'party',
+          component: () => import('@/views/layout/party')
         }
       ]
     },
@@ -31,6 +36,18 @@ export default new Router({
     {
       path: '/login',
       component: () => import('@/views/login/login')
+    },
+    {
+      path: '/list',
+      component: () => import('@/views/list/list')
+    },
+    {
+      path: '/organization',
+      component: () => import('@/views/organization/organization')
+    },
+    {
+      path: '/map',
+      component: () => import('@/views/map/map')
     }
   ]
 })
