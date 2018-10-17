@@ -42,12 +42,28 @@
 
     .content {
       font-size: 14px;
-      margin-top: 20px;
       line-height: 1.5;
 
       img {
         width: 100%;
       }
     }
+  }
+
+  h1 {
+    color: #333;
+    font-weight: 500;
+    margin: 10px auto;
+  }
+
+  h2 {
+    font-size: 19px;
+    color: #333;
+    font-weight: 400;
+    margin: 10px auto;
+  }
+
+  p {
+    line-height: 2;
   }
 </style>
