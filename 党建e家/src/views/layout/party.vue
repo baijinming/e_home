@@ -3,31 +3,35 @@
     <Header></Header>
     <div class="party">
       <div class="author-icon">
-        <img :src="this.$store.userInfo ? this.$store.userInfo.data.header : '/static/imgs/bt_bg.png'" alt="">
-        <p v-text="this.$store.userInfo ? this.$store.userInfo.data.username : '你还没有登录，请登录'" @click="() => this.$router.push('/login')"></p>
+        <img :src="this.$store.state.userInfo ? this.$store.state.userInfo.header : '/static/imgs/bt_bg.png'" alt="">
+        <p v-text="this.$store.state.userInfo ? this.$store.state.userInfo.username : '你还没有登录，请登录'" @click="() => this.$router.push('/login')"></p>
       </div>
 
       <div class="menu">
-        <div class="menu-item clearfix" @click="() => this.$router.push('/login')">
+        <div class="menu-item clearfix" @click="() => this.$router.push(this.$store.state.userInfo ? '/info' : '/login')">
           <img class="fll icon" src="/static/imgs/person.png" alt="">
           <p class="fll">个人信息</p>
           <img class="flr right" src="/static/imgs/right.png" alt="">
         </div>
-        <div class="menu-item clearfix" @click="() => this.$router.push('/login')">
+        <div class="menu-item clearfix" @click="() => this.$router.push(this.$store.state.userInfo ? '/score' : '/login')">
           <img class="fll icon" src="/static/imgs/lxjf.png" alt="">
           <p class="fll">个人量化积分</p>
           <img class="flr right" src="/static/imgs/right.png" alt="">
         </div>
-        <div class="menu-item clearfix" @click="() => this.$router.push('/login')">
+        <div class="menu-item clearfix" @click="() => this.$router.push(this.$store.state.userInfo ? '/updatepwd' : '/login')">
           <img class="fll icon" src="/static/imgs/xgmm.png" alt="">
           <p class="fll">修改密码</p>
           <img class="flr right" src="/static/imgs/right.png" alt="">
         </div>
-        <div class="menu-item clearfix" @click="() => this.$router.push('/login')">
+        <div class="menu-item clearfix" @click="() => this.$router.push(this.$store.state.userInfo ? '/pay' : '/login')">
           <img class="fll icon" src="/static/imgs/icon3.png" alt="">
           <p class="fll">党费缴纳</p>
           <img class="flr right" src="/static/imgs/right.png" alt="">
         </div>
+      </div>
+
+      <div v-if="this.$store.state.userInfo">
+        <button class="login-out" @click="loginout">退出登录</button>
       </div>
     </div>
   </div>
@@ -39,6 +43,13 @@
       components: {
         Header
       },
+      methods: {
+        loginout() {
+          this.$store.commit('CHANGE_INFO', null);
+          this.$store.commit('CHANGE_TOKEN', null);
+          this.$router.push('/login')
+        }
+      },
       created() {
         this.$store.commit('CHANGE_TITLE', '我的党建')
         this.$store.commit('CHANGE_BACK', false)
@@ -48,7 +59,6 @@
 
 <style scoped lang="scss">
   .author-icon {
-    width: 7.5rem;
     height: 2.8rem;
     background-color: #c50206;
     text-align: center;
@@ -85,5 +95,17 @@
       width: 8px;
       margin: 20px 10px;
     }
+  }
+
+  .login-out {
+    height: 50px;
+    width: 90%;
+    margin: 30px 5%;
+    box-sizing: border-box;
+    color: #fff;
+    font-size: 16px;
+    background-color: #ef473a;
+    border: 1px solid #ef473a;
+    border-radius: 4px;
   }
 </style>

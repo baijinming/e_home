@@ -48,6 +48,34 @@ export default new Router({
     {
       path: '/map',
       component: () => import('@/views/map/map')
+    },
+    {
+      path: '/info',
+      component: () => import('@/views/user/info')
+    },
+    {
+      path: '/score',
+      component: () => import('@/views/user/score')
+    },
+    {
+      path: '/integralList',
+      component: () => import('@/views/user/integralList')
+    },
+    {
+      path: '/interaction',
+      component: () => import('@/views/user/interaction')
+    },
+    {
+      path: '/updatepwd',
+      component: () => import('@/views/user/updatepwd')
+    },
+    {
+      path: '/pay',
+      component: () => import('@/views/user/pay')
+    },
+    {
+      path: '/partyToday',
+      component: () => import('@/views/detail/partyToday')
     }
   ]
 })

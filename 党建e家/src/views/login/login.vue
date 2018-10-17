@@ -28,9 +28,13 @@
     },
     methods: {
       login() {
-        this.$axios.post('/hhdj/user/userLogin.do', this.form).then(res => {
+        let formData = new FormData();
+        formData.append('id_card', this.form.id_card);
+        formData.append('password', this.form.password);
+        this.$axios.post('/hhdj/user/userLogin.do', formData).then(res => {
           if(res.code == 1) {
-            this.$store.commit('CHANGE_INFO', res)
+            this.$store.commit('CHANGE_INFO', res.data)
+            this.$store.commit('CHANGE_TOKEN', res.token)
             this.$router.push('/party')
           }
         })
@@ -70,6 +74,11 @@
       border-radius: 4px;
       text-indent: 10px;
     }
+
+    input:focus {
+      outline:none
+    }
+
     button {
       width: 100%;
       height: 40px;

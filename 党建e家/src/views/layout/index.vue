@@ -20,7 +20,7 @@
           <img src="/static/imgs/icon_03.png" alt="">
           <p>掌上组织生活</p>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" @click="() => this.$router.push('/interaction')">
           <img src="/static/imgs/icon_05.png" alt="">
           <p>党员云互动</p>
         </div>
@@ -32,7 +32,7 @@
           <img src="/static/imgs/icon_02.png" alt="">
           <p>党员亮身份</p>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" @click="() => this.$router.push('/partyToday')">
           <img src="/static/imgs/icon_06.png" alt="">
           <p>党史上的今天</p>
         </div>

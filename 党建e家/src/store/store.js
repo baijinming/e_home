@@ -8,7 +8,8 @@ const store = new Vuex.Store({
   state: {
     title: '',
     needBack: true,
-    userInfo: {}
+    userInfo: {},
+    token: ''
   },
   mutations: {
     'CHANGE_TITLE'(state, text) {
@@ -19,6 +20,9 @@ const store = new Vuex.Store({
     },
     'CHANGE_INFO'(state, info) {
       state.userInfo = info
+    },
+    'CHANGE_TOKEN'(state, token) {
+      state.token = token;
     }
   },
   plugins: [
