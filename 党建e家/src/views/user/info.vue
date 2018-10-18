@@ -14,8 +14,9 @@
         <p>头像</p>
         <img v-if="!isRedact" :src="info.header" alt="">
         <label v-else>
-          <img :src="info.header" alt="">
-          <input id="img" style="display: none" type="file" @change="imgUpload">
+          <img v-if="!header" :src="info.header" alt="">
+          <img v-else :src="headerBase" alt="">
+          <input style="display: none" type="file" @change="imgChange">
         </label>
       </div>
       <div class="info-item">
@@ -77,15 +78,22 @@
       </div>
       <div class="info-item">
         <p>入党时间</p>
-        <p>{{info.joinPartyTime}}</p>
+        <p v-if="!isRedact">{{info.joinPartyTime}}</p>
+        <input v-else type="date" v-model="info.joinPartyTime">
       </div>
       <div class="info-item">
         <p>党费最后交纳时间</p>
-        <p>{{info.lastPayTime}}</p>
+        <p v-if="!isRedact">{{info.lastPayTime}}</p>
+        <input v-else type="date" v-model="info.lastPayTime">
       </div>
       <div class="info-item">
         <p>当前身份</p>
-        <p>{{info.partyIdentity}}</p>
+        <p v-if="!isRedact">{{info.partyIdentity}}</p>
+        <select v-else v-model="info.partyStatus" name="party" id="">
+          <option value="2">党员</option>
+          <option value="1">预备党员</option>
+          <option value="0">积极分子</option>
+        </select>
       </div>
     </div>
   </div>
@@ -97,26 +105,38 @@
     data() {
       return {
         info: {},
-        isRedact: false
+        isRedact: false,
+        header: '',
+        headerBase: ''
       }
     },
     methods: {
       getData() {
         this.$axios.get('/hhdj/user/userInfo.do').then(res =>{
           this.info = res.data;
+          this.$store.commit('CHANGE_INFO', res.data)
         })
       },
-      imgUpload(event) {
-        axios.get('http://upload.yaojunrong.com/getToken').then(res => {
-          let token = res.data.data;
-          let form = new FormData();
-          form.append("file",event.target.files[0]);
-          form.append('token', token);
-          axios.post("https://upload-z1.qiniup.com", form, {header:{"Conent-type":"multipart/form-data"}}).then(res => {
-            this.info.header = res.data.url
-            console.log(res)
+      imgChange(e) {
+        let file = e.target.files[0];
+        let filesize = file.size;
+        let filename = file.name;
+        // 2,621,440   2M
+        if (filesize > 2101440) {
+          // 图片大于2MB
+
+        }
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload =  (e) => {
+          this.headerBase = e.target.result;
+          let imgcode = e.target.result.replace('data:image/png;base64,', '');
+          let formData = new FormData();
+          formData.append("myFile", imgcode);
+          this.$axios.post('/hhdj/image/uploadBase64.do', formData).then(res => {
+            this.header = res.url
           })
-        });
+        }
       },
       updateInfo() {
         let formDate = new FormData();
@@ -133,6 +153,9 @@
         formDate.append('joinPartyTime', this.info.joinPartyTime);
         formDate.append('lastPayTime', this.info.lastPayTime);
         formDate.append('partyStatus', this.info.partyStatus);
+        if(this.header) {
+          formDate.append('header', this.header);
+        }
         this.$axios.post('/hhdj/user/modifyInfo.do', formDate).then(res => {
           if(res.code == 1) {
             this.getData();
@@ -191,6 +214,13 @@
     color: #333;
   }
   input:focus {
+    outline: none;
+  }
+  select {
+    border: none;
+    outline: none;
+  }
+  select:focus {
     outline: none;
   }
 

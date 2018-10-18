@@ -66,6 +66,10 @@ export default new Router({
       component: () => import('@/views/user/interaction')
     },
     {
+      path: '/replay',
+      component: () => import('@/views/user/replay')
+    },
+    {
       path: '/updatepwd',
       component: () => import('@/views/user/updatepwd')
     },

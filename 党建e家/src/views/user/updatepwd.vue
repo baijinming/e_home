@@ -12,11 +12,13 @@
         <button class="btn" @click="updatepwd">确定</button>
       </div>
     </div>
+    <Hint v-if="hint" :title="hint"></Hint>
   </div>
 </template>
 
 <script>
   import Header from '../../components/Header'
+  import Hint from '../../components/hint'
   export default {
     data() {
       return {
@@ -24,22 +26,30 @@
           oldPwd: '',
           newPwd: ''
         },
-        testpwd: ''
+        testpwd: '',
+        hint: ''
       }
     },
     components: {
-      Header
+      Header,
+      Hint
     },
     methods: {
       updatepwd() {
         if (this.testpwd != this.form.newPwd)  {
-          this.$message.warning('两次输入密码不一致')
+          this.hint = '两次输入密码不一致'
+          setTimeout(() => {
+            this.hint = ''
+          },2000)
         }else {
           this.$axios.get('/hhdj/user/updatePwd.do', this.form).then(res => {
             if(res.code == 1) {
               this.$router.go(-1)
             }else {
-              this.$message.warning('旧密码不正确')
+              this.hint = '旧密码不正确'
+              setTimeout(() => {
+                this.hint = ''
+              },2000)
             }
           })
         }
