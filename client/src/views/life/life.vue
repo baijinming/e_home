@@ -8,15 +8,15 @@
           <img src="/static/imgs/icon1.png" alt="">
           <p>政治学习</p>
         </div>
-        <div class="ul-item">
+        <div class="ul-item" @click="() => this.$router.push('/check/0')">
           <img src="/static/imgs/icon2.png" alt="">
           <p>思想汇报</p>
         </div>
-        <div class="ul-item">
+        <div class="ul-item" @click="() => this.$router.push('/check/1')">
           <img src="/static/imgs/icon3.png" alt="">
           <p>心得总结</p>
         </div>
-        <div class="ul-item">
+        <div class="ul-item" @click="() => this.$router.push(this.$store.state.token ? '/lifeChoice' : '/login')">
           <img src="/static/imgs/icon4.png" alt="">
           <p>民主评议</p>
         </div>
@@ -41,6 +41,10 @@
         this.$store.commit('CHANGE_TITLE', title);
         this.$store.commit('CHANGE_BACK', true)
       }
+    },
+    created() {
+      this.$store.commit('CHANGE_TITLE', '掌上组织生活');
+      this.$store.commit('CHANGE_BACK', true)
     }
   }
 </script>

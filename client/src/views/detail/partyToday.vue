@@ -2,7 +2,6 @@
   <div>
     <Header></Header>
     <div class="text">
-      <div class="title">党史上的今天</div>
       <div class="content" v-html="content"></div>
     </div>
   </div>
@@ -27,7 +26,7 @@
         this.$axios.get(`/hhdj/proxy/proxy.do`, {url}).then(res => {
           let cheerio = require("cheerio");
           let $ = cheerio.load(res);
-          $("h1").remove();
+          // $("h1").remove();
           this.content = $(".p1_02").html();
 
           //正则切割
@@ -49,11 +48,6 @@
     width: 7rem;
     margin: 0 auto;
     overflow: hidden;
-
-    .title {
-      font-size: 28px;
-      margin: 10px 0;
-    }
 
     .content {
       font-size: 14px;

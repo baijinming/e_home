@@ -42,8 +42,28 @@ export default new Router({
       component: () => import('@/views/list/list')
     },
     {
-      path: '/organization',
-      component: () => import('@/views/organization/organization')
+      path: '/life',
+      component: () => import('@/views/life/life')
+    },
+    {
+      path: '/lifeChoice',
+      component: () => import('@/views/life/lifeChoice')
+    },
+    {
+      path: '/personalsummary',
+      component: () => import('@/views/life/personalsummary')
+    },
+    {
+      path: '/review',
+      component: () => import('@/views/life/review')
+    },
+    {
+      path: '/partyMember/:select_branch',
+      component: () => import('@/views/life/partyMember')
+    },
+    {
+      path: '/check/:id',
+      component: () => import('@/views/life/check')
     },
     {
       path: '/map',

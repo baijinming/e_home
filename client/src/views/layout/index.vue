@@ -16,7 +16,7 @@
           <img src="/static/imgs/icon_01.png" alt="">
           <p>信工新闻眼</p>
         </div>
-        <div class="menu-item" @click="toOrganization('掌上组织生活')">
+        <div class="menu-item" @click="() => this.$router.push('/life')">
           <img src="/static/imgs/icon_03.png" alt="">
           <p>掌上组织生活</p>
         </div>
@@ -88,11 +88,6 @@
         },
         toList(title) {
           this.$router.push('/list');
-          this.$store.commit('CHANGE_TITLE', title);
-          this.$store.commit('CHANGE_BACK', true)
-        },
-        toOrganization(title) {
-          this.$router.push('/organization');
           this.$store.commit('CHANGE_TITLE', title);
           this.$store.commit('CHANGE_BACK', true)
         }
