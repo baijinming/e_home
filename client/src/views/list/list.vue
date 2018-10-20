@@ -1,29 +1,26 @@
 <template>
   <div class="list">
     <Header></Header>
-    <scroller
-      :on-refresh= "refresh"
-      :on-infinite="infinite"
-      ref="my_scroller">
-      <div v-if="!isPhoto">
-        <div class="list-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
-          <img :src="item.pic" alt="">
-          <div class="item-title">
-            <div  class="title">{{item.title}}</div>
-            <div class="item-footer clearfix">
-              <div class="fll">{{item.currentTime}}</div>
-              <div class="flr"><img class="eye-icon" src="/static/imgs/eye.png" alt="">{{item.count}}</div>
-            </div>
+    <div v-if="!isPhoto">
+      <div class="list-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
+        <img :src="item.pic" alt="">
+        <div class="item-title">
+          <div  class="title">{{item.title}}</div>
+          <div class="item-footer clearfix">
+            <div class="fll">{{item.currentTime}}</div>
+            <div class="flr"><img class="eye-icon" src="/static/imgs/eye.png" alt="">{{item.count}}</div>
           </div>
         </div>
       </div>
-      <div v-else class="photos">
-          <div class="photo-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
-            <img :src="item.pic" alt="">
-            <p>{{item.title}}</p>
-          </div>
-      </div>
-    </scroller>
+    </div>
+    <div v-else class="photos">
+        <div class="photo-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
+          <img :src="item.pic" alt="">
+          <p>{{item.title}}</p>
+        </div>
+    </div>
+    <img class="loading" v-if="isLoading" src="/static/imgs/loading.gif" alt="">
+    <div class="dixian" v-else>没有数据了</div>
   </div>
 </template>
 
@@ -35,43 +32,54 @@
         lists: [],
         type: 0,
         isPhoto: false,
-        pn: 1
+        pn: 1,
+        isLoading: false,
+        total: 0
       }
     },
     components: {
-      Header
+      Header,
     },
     methods: {
       getData() {
+        this.isLoading = true;
         this.$axios.get('/hhdj/news/newsList.do', {page: this.pn, rows: 10, type: this.type}).then(res=> {
-          this.lists = [...this.lists,...res.rows]
+          this.lists = [...this.lists,...res.rows];
+          this.total = res.total;
+          this.isLoading = false
         })
       },
       lookDetail(id) {
         this.$router.push(`/detail/${id}`)
       },
-      infinite(done) {
-          if(this.lists.length%10 == 0){
-            let _this = this;
-            async function f() {
-              _this.pn++;````
-              await _this.getData();
-              await done();
-            }
-            f()
-          }else {
-            this.$refs.my_scroller.finishInfinite(false)
-          }
-      },
-      refresh(done) {
-        let _this = this
-        async function f() {
-          _this.pn = 1;
-          await _this.getData();
-          await done()
+      getMore() {
+        if(this.lists.length >= this.total){
+          this.isLoading = false;
+          window.removeEventListener('scroll', this.scrollBottom)
+        }else {
+          this.pn++;
+          this.getData();
         }
-        f();
+      },
+      scrollBottom() {
+        //变量scrollTop是滚动条滚动时，距离顶部的距离
+        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        //变量windowHeight是可视区的高度
+        let windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        //变量scrollHeight是滚动条的总高度
+        let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+
+        scrollTop = parseInt(scrollTop) + 1;
+
+        //滚动条到底部的条件
+        if (scrollTop + windowHeight == scrollHeight) {
+          //写后台加载数据的函数
+          this.getMore()
+        }
       }
+    },
+    mounted(){
+      window.addEventListener('scroll', this.scrollBottom)
     },
     created() {
       switch (this.$store.state.title) {
@@ -177,5 +185,17 @@
         overflow: hidden;
       }
     }
+  }
+
+  .loading {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin: 10px 3.2rem;
+  }
+  .dixian {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin: 10px;
   }
 </style>
