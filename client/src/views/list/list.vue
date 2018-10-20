@@ -1,24 +1,29 @@
 <template>
   <div class="list">
     <Header></Header>
-    <div v-if="!isPhoto">
-      <div class="list-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
-        <img :src="item.pic" alt="">
-        <div class="item-title">
-          <div  class="title">{{item.title}}</div>
-          <div class="item-footer clearfix">
-            <div class="fll">{{item.currentTime}}</div>
-            <div class="flr"><img class="eye-icon" src="/static/imgs/eye.png" alt="">{{item.count}}</div>
+    <scroller
+      :on-refresh= "refresh"
+      :on-infinite="infinite"
+      ref="my_scroller">
+      <div v-if="!isPhoto">
+        <div class="list-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
+          <img :src="item.pic" alt="">
+          <div class="item-title">
+            <div  class="title">{{item.title}}</div>
+            <div class="item-footer clearfix">
+              <div class="fll">{{item.currentTime}}</div>
+              <div class="flr"><img class="eye-icon" src="/static/imgs/eye.png" alt="">{{item.count}}</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div v-else class="photos">
-        <div class="photo-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
-          <img :src="item.pic" alt="">
-          <p>{{item.title}}</p>
-        </div>
-    </div>
+      <div v-else class="photos">
+          <div class="photo-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
+            <img :src="item.pic" alt="">
+            <p>{{item.title}}</p>
+          </div>
+      </div>
+    </scroller>
   </div>
 </template>
 
@@ -29,7 +34,8 @@
       return {
         lists: [],
         type: 0,
-        isPhoto: false
+        isPhoto: false,
+        pn: 1
       }
     },
     components: {
@@ -37,12 +43,34 @@
     },
     methods: {
       getData() {
-        this.$axios.get('/hhdj/news/newsList.do', {page: 1, rows: 10, type: this.type}).then(res=> {
-          this.lists = res.rows
+        this.$axios.get('/hhdj/news/newsList.do', {page: this.pn, rows: 10, type: this.type}).then(res=> {
+          this.lists = [...this.lists,...res.rows]
         })
       },
       lookDetail(id) {
         this.$router.push(`/detail/${id}`)
+      },
+      infinite(done) {
+          if(this.lists.length%10 == 0){
+            let _this = this;
+            async function f() {
+              _this.pn++;````
+              await _this.getData();
+              await done();
+            }
+            f()
+          }else {
+            this.$refs.my_scroller.finishInfinite(false)
+          }
+      },
+      refresh(done) {
+        let _this = this
+        async function f() {
+          _this.pn = 1;
+          await _this.getData();
+          await done()
+        }
+        f();
       }
     },
     created() {
