@@ -1,31 +1,39 @@
 <template>
   <div class="list">
     <Header></Header>
-    <div v-if="!isPhoto">
-      <div class="list-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
-        <img :src="item.pic" alt="">
-        <div class="item-title">
-          <div  class="title">{{item.title}}</div>
-          <div class="item-footer clearfix">
-            <div class="fll">{{item.currentTime}}</div>
-            <div class="flr"><img class="eye-icon" src="/static/imgs/eye.png" alt="">{{item.count}}</div>
+    <Loadmore
+      :top-method="loadTop"
+      :bottom-method="loadBottom"
+      :bottom-all-loaded="allLoaded"
+      ref="loadmore"
+      topPullText="" topDropText="" topLoadingText="" bottomPullText	="" bottomDropText="" bottomLoadingText="">
+        <div v-if="!isPhoto">
+          <div class="list-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
+            <img :src="item.pic" alt="">
+            <div class="item-title">
+              <div  class="title">{{item.title}}</div>
+              <div class="item-footer clearfix">
+                <div class="fll">{{item.currentTime}}</div>
+                <div class="flr"><img class="eye-icon" src="/static/imgs/eye.png" alt="">{{item.count}}</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div v-else class="photos">
-        <div class="photo-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
-          <img :src="item.pic" alt="">
-          <p>{{item.title}}</p>
+        <div v-else class="photos">
+          <div class="photo-item" v-for="(item, index) in lists" :key="index" @click="lookDetail(item.newsId)">
+            <img :src="item.pic" alt="">
+            <p>{{item.title}}</p>
+          </div>
         </div>
-    </div>
-    <img class="loading" v-if="isLoading" src="/static/imgs/loading.gif" alt="">
-    <div class="dixian" v-else>没有数据了</div>
+        <img class="loading" v-if="isLoading" src="/static/imgs/loading.gif" alt="">
+        <div class="dixian" v-if="allLoaded">没有数据了</div>
+    </Loadmore>
   </div>
 </template>
 
 <script>
   import Header from '../../components/Header'
+  import { Loadmore } from 'mint-ui'
   export default {
     data() {
       return {
@@ -34,52 +42,41 @@
         isPhoto: false,
         pn: 1,
         isLoading: false,
+        allLoaded: false,
         total: 0
       }
     },
     components: {
       Header,
+      Loadmore
     },
     methods: {
       getData() {
         this.isLoading = true;
         this.$axios.get('/hhdj/news/newsList.do', {page: this.pn, rows: 10, type: this.type}).then(res=> {
-          this.lists = [...this.lists,...res.rows];
+          this.lists = [...this.lists, ...res.rows];
           this.total = res.total;
-          this.isLoading = false
+          this.isLoading = false;
         })
       },
       lookDetail(id) {
         this.$router.push(`/detail/${id}`)
       },
-      getMore() {
-        if(this.lists.length >= this.total){
-          this.isLoading = false;
-          window.removeEventListener('scroll', this.scrollBottom)
-        }else {
-          this.pn++;
-          this.getData();
-        }
+      loadTop() {
+        this.pn = 1;
+        this.lists = [];
+        this.getData();
+        this.$refs.loadmore.onTopLoaded();
+        this.allLoaded = false
       },
-      scrollBottom() {
-        //变量scrollTop是滚动条滚动时，距离顶部的距离
-        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        //变量windowHeight是可视区的高度
-        let windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
-        //变量scrollHeight是滚动条的总高度
-        let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-
-        scrollTop = parseInt(scrollTop) + 1;
-
-        //滚动条到底部的条件
-        if (scrollTop + windowHeight == scrollHeight) {
-          //写后台加载数据的函数
-          this.getMore()
+      loadBottom() {
+        this.pn++;
+        this.getData();
+        if (this.lists.length >= this.total) {
+          this.allLoaded = true
         }
+        this.$refs.loadmore.onBottomLoaded();
       }
-    },
-    mounted(){
-      window.addEventListener('scroll', this.scrollBottom)
     },
     created() {
       switch (this.$store.state.title) {
@@ -117,6 +114,11 @@
 </script>
 
 <style scoped lang="scss">
+  .list {
+    font-size: 14px;
+    text-align: center;
+    color: #666;
+  }
   .list-item {
     height: 100px;
     width: 7.5rem;

@@ -9,7 +9,9 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
 import xhr from './utils/axios'
 import store from './store/store'
+import Mint from 'mint-ui';
 
+Vue.use(Mint);
 Vue.use(VueAwesomeSwiper, /* { default global options } */)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
