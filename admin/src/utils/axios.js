@@ -10,7 +10,7 @@ const instance = axios.create({
 const xhr = {
   get(url, data, config) {
     return new Promise((resolve, reject) => {
-      instance.get(url, {params: data, ...config}).then(res => {
+      instance.get(url, {params: data}, config).then(res => {
         resolve(res.data)
       }).catch(err =>{
         reject(err)

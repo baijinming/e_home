@@ -68,7 +68,6 @@ router.post('/add', (req, res, next) => {
                }
                else {
                    res.json({
-                       data: '用户名已存在',
                        code: 400,
                        msg: '用户名已存在'
                    })
@@ -103,12 +102,13 @@ router.post('/login', (req, res, next) => {
                 avatar: data.avatar,
                 idCardNumber: data.idCardNumber,
                 level: data.level
-            }
+            };
             let token = jwt.sign(userInfo, tokenConfig.secret, {expiresIn: tokenConfig.exp()});
             res.json({
                 code: 200,
                 msg: '登录成功',
-                token
+                token,
+                data
             })
         }
     }).catch(err => {
@@ -135,6 +135,19 @@ router.get('/userInfo', (req, res, next) => {
             next(new Error(err))
         })
     })
+});
+
+router.get('/user', (req, res, next) => {
+        let {page = 1, rows = 10 } = req.params;
+        page = parseInt(page);
+        rows = parseInt(rows);
+        user.find().skip((page-1)*rows).limit(rows).sort({_id: -1}).select({pwd: 0,level: 0,isCanLogin: 0}).then(data => {
+            res.json({
+                data,
+                code: 200,
+                msg: 'success'
+            })
+        })
 })
 
 module.exports = router;

@@ -22,6 +22,14 @@ export default new Router({
         {
           path: 'home',
           component:() => import('@/views/Home')
+        },
+        {
+          path: 'user',
+          component: () => import('@/views/User')
+        },
+        {
+          path: 'addUser',
+          component: () => import('@/views/User/addUser')
         }
       ]
     }

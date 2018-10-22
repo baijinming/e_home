@@ -1,5 +1,5 @@
 const  mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/e_home");
+mongoose.connect("mongodb://localhost/e_home", { useNewUrlParser: true });
 
 const db = mongoose.connection;
 db.once("open",()=> {

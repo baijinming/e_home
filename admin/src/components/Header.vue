@@ -30,6 +30,6 @@
     height: 50px;
     padding:20px;
     box-sizing: border-box;
-    border-bottom: 1px solid #666;
+    background-color: #fff;
   }
 </style>

@@ -94,6 +94,6 @@ const user = new mongoose.Schema({
         type: String,
         default: "信息工程学院学生流动党支部（北京）"
     }
-}, {versionKey: false})
+}, {versionKey: false, timestamps: {createAt: "createTime", updateAt: "updateTime"}});
 
 module.exports = mongoose.model("user", user)
