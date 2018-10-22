@@ -4,9 +4,9 @@ export function getUrl() {
   month = month<10 ? "0"+month : "" + month;
   day = day<10 ? "0"+day : "" + day;
 
-  var vm = month;
-  var vd = day;
-  var url = "";
+  let vm = month;
+  let vd = day;
+  let url = "";
   switch (vm) {
     case "01":
       switch (vd) {

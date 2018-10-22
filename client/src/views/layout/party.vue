@@ -3,8 +3,8 @@
     <Header></Header>
     <div class="party">
       <div class="author-icon">
-        <img :src="this.$store.state.userInfo ? this.$store.state.userInfo.header : '/static/imgs/bt_bg.png'" alt="">
-        <p v-text="this.$store.state.userInfo ? this.$store.state.userInfo.username : '你还没有登录，请登录'" @click="() => this.$router.push('/login')"></p>
+        <img :src="this.$store.state.token ? this.$store.state.userInfo.header : '/static/imgs/bt_bg.png'" alt="">
+        <p v-text="this.$store.state.token ? this.$store.state.userInfo.username : '你还没有登录，请登录'" @click="() => this.$router.push('/login')"></p>
       </div>
 
       <div class="menu">

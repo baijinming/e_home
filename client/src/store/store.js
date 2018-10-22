@@ -8,7 +8,7 @@ const store = new Vuex.Store({
   state: {
     title: '',
     needBack: true,
-    userInfo: null,
+    userInfo: {},
     token: '',
     comment: {}
   },
