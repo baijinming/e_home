@@ -140,7 +140,7 @@ router.get('/userInfo', (req, res, next) => {
 
 //获取用户列表
 router.get('/', (req, res, next) => {
-        let {page = 1, rows = 10 } = req.params;
+        let {page = 1, rows = 10 } = req.body;
         page = parseInt(page);
         rows = parseInt(rows);
         user.find().skip((page-1)*rows).limit(rows).sort({_id: -1}).select({pwd: 0,level: 0,isCanLogin: 0}).then(data => {

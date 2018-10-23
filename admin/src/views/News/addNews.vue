@@ -21,7 +21,7 @@
           <el-option
             v-for="item in users"
             :key="item._id"
-            :label="item.idCardNumber"
+            :label="item.userName"
             :value="item._id">
           </el-option>
         </el-select>

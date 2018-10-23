@@ -28,7 +28,14 @@
       <el-table-column
         prop="author.userName"
         label="作者"
-        width="250">
+        width="120">
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        width="120">
+        <template slot-scope="scope">
+          <el-button type="warning" @click="remove(scope.row._id)">删除</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -46,6 +53,12 @@
         this.$axios.get('/news').then(res => {
           this.news = res.data
         })
+      },
+      remove(id) {
+        this.$axios.delete(`/news/${id}`).then(res => {
+          this.$message.success(res.msg)
+          this.getData()
+        })
       }
     },
     created() {
@@ -55,6 +68,14 @@
 </script>
 
 <style scoped>
+  .user {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: 2px 2px 2px #f1f3f5;
+  }
+
   .avatar {
     width: 50px;
     height: 50px;

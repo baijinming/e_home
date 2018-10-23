@@ -13,7 +13,7 @@ const news = new mongoose.Schema({
     contentText: String,
     author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user',
     },
     catagory: {
         type: mongoose.Schema.Types.ObjectId,
