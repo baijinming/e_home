@@ -3,6 +3,8 @@ const router = express.Router();
 const token = require("../config/upload");
 
 router.use('/user', require('./user'));
+router.use('/news', require('./news'));
+router.use('/catagory', require('./catagory'));
 
 router.get("/get", (req, res) => {
     res.json({

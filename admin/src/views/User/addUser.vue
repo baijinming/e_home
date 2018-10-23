@@ -5,10 +5,13 @@
         <ImgUpload v-model="form.avatar"></ImgUpload>
       </el-form-item>
       <el-form-item label="用户名">
+        <el-input v-model="form.userName"></el-input>
+      </el-form-item>
+      <el-form-item label="身份证号">
         <el-input v-model="form.idCardNumber"></el-input>
       </el-form-item>
       <el-form-item label="用户密码">
-        <el-input v-model="form.pwd"></el-input>
+        <el-input type="password" v-model="form.pwd"></el-input>
       </el-form-item>
       <el-form-item label="家庭住址">
         <el-input v-model="form.homeAddress"></el-input>
@@ -31,7 +34,8 @@
           avatar: '',
           pwd: '',
           homeAddress: '',
-          workAddress: ''
+          workAddress: '',
+          userName: ''
         }
       }
     },

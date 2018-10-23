@@ -3,11 +3,11 @@
     <div class="warp">
       <h2>欢迎来到E家后台管理系统</h2>
       <el-form v-model="form">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
+        <el-form-item label="身份证号" prop="username">
+          <el-input v-model="form.idCardNumber" placeholder="请输入身份证号"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="form.password" placeholder="请输入密码"></el-input>
+          <el-input type="password" v-model="form.pwd" placeholder="请输入密码"></el-input>
         </el-form-item>
         <el-button class="login-btn" type="primary" @click="handleLogin">登录</el-button>
       </el-form>
@@ -20,23 +20,21 @@
     data() {
       return {
         form: {
-          username: "",
-          password: ""
+          idCardNumber: "",
+          pwd: ""
         }
       }
     },
     methods: {
       handleLogin() {
-        let form = {
-          idCardNumber: this.form.username,
-          pwd: this.form.password
-        };
-        this.$axios.post('/user/login', form).then(res => {
+        this.$axios.post('/user/login', this.form).then(res => {
           if (res.code == 200) {
             this.$message.success(res.msg)
-            this.$router.push('/layout/home')
             this.$store.commit('UPDATE_TOKEN', res.token)
             this.$store.commit('UPDATE_INFO', res.data)
+            setTimeout(() => {
+              this.$router.push('/layout/home')
+            },1000)
           }else {
             this.$message.warning(res.msg)
           }

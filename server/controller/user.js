@@ -104,6 +104,7 @@ router.post('/login', (req, res, next) => {
                 level: data.level
             };
             let token = jwt.sign(userInfo, tokenConfig.secret, {expiresIn: tokenConfig.exp()});
+            req.session.user = data;
             res.json({
                 code: 200,
                 msg: '登录成功',
@@ -137,7 +138,8 @@ router.get('/userInfo', (req, res, next) => {
     })
 });
 
-router.get('/user', (req, res, next) => {
+//获取用户列表
+router.get('/', (req, res, next) => {
         let {page = 1, rows = 10 } = req.params;
         page = parseInt(page);
         rows = parseInt(rows);

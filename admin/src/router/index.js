@@ -30,6 +30,14 @@ export default new Router({
         {
           path: 'addUser',
           component: () => import('@/views/User/addUser')
+        },
+        {
+          path: 'news',
+          component: () => import('@/views/News')
+        },
+        {
+          path: 'addNews',
+          component: () => import('@/views/News/addNews')
         }
       ]
     }
