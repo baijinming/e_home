@@ -26,7 +26,6 @@
         this.$axios.get(`/hhdj/proxy/proxy.do`, {url}).then(res => {
           let cheerio = require("cheerio");
           let $ = cheerio.load(res);
-          // $("h1").remove();
           this.content = $(".p1_02").html();
 
           //正则切割

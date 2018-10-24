@@ -38,6 +38,18 @@ export default new Router({
         {
           path: 'addNews',
           component: () => import('@/views/News/addNews')
+        },
+        {
+          path: 'swiper',
+          component: () => import('@/views/Swiper')
+        },
+        {
+          path: 'addSwiper',
+          component: () => import('@/views/Swiper/addSwiper')
+        },
+        {
+          path: 'redactSwiper/:id',
+          component: () => import('@/views/Swiper/addSwiper')
         }
       ]
     }

@@ -1,39 +1,32 @@
 <template>
   <div class="user">
     <el-table
-      :data="news"
+      :data="swipers"
       style="width: 100%">
       <el-table-column
-        label="头像"
-        >
+        label="轮播图图片">
         <template slot-scope="scope">
-          <img class="avatar" :src="scope.row.header" alt="">
+          <img class="avatar" :src="scope.row.img" alt="">
         </template>
       </el-table-column>
       <el-table-column
         prop="title"
-        label="新闻标题"
-        >
+        label="轮播图标题">
       </el-table-column>
       <el-table-column
-        prop="contentText"
-        label="描述"
-        >
+        prop="newsId.title"
+        label="对应新闻">
       </el-table-column>
       <el-table-column
-        prop="catagory.type"
-        label="分类"
-        >
-      </el-table-column>
-      <el-table-column
-        prop="author.userName"
-        label="作者"
-        >
-      </el-table-column>
-      <el-table-column
-        label="操作"
-       >
+        label="是否显示">
         <template slot-scope="scope">
+          <p v-text="scope.row.type == 1 ? '显示' :  '不显示'"></p>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="操作">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="redact(scope.row._id)">编辑</el-button>
           <el-button type="warning" @click="remove(scope.row._id)">删除</el-button>
         </template>
       </el-table-column>
@@ -45,20 +38,23 @@
   export default {
     data() {
       return {
-        news: []
+        swipers: []
       }
     },
     methods: {
       getData() {
-        this.$axios.get('/news').then(res => {
-          this.news = res.data
+        this.$axios.get('/swiper').then(res => {
+          this.swipers = res.data
         })
       },
       remove(id) {
-        this.$axios.delete(`/news/${id}`).then(res => {
+        this.$axios.delete(`/swiper/${id}`).then(res => {
           this.$message.success(res.msg)
           this.getData()
         })
+      },
+      redact(id) {
+        this.$router.push(`/layout/redactSwiper/${id}`)
       }
     },
     created() {

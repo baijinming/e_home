@@ -1,24 +1,18 @@
 const mongoose = require("mongoose");
 
-const news = new mongoose.Schema({
-    header: {
+const comment = new mongoose.Schema({
+    content: {
         type: String,
         require: true
     },
-    title: {
-        type: String,
-        require: true
-    },
-    content: String,
-    contentText: String,
-    author: {
+    user: {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: 'user',
+        ref: 'user'
     },
-    catagory: {
+    forum: {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: 'catagory'
+        ref: 'forum'
     }
 },{versionKey: false, timestamps: {createAt: "createTime", updateAt: "updateTime"}});
 
-module.exports = mongoose.model("news", news)
+module.exports = mongoose.model("comment", comment);

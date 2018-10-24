@@ -1,13 +1,21 @@
 <template>
   <div class="add-user">
     <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="新闻头图">
+      <el-form-item
+        label="新闻头图"
+        prop="header"
+        :rules="{required: true, message: '图片必须上传', trigger: 'blur'}"
+        >
         <ImgUpload v-model="form.header"></ImgUpload>
       </el-form-item>
-      <el-form-item label="新闻标题">
+      <el-form-item label="新闻标题"
+                    prop="title"
+                    :rules="{required: true, message: '标题必须添加', trigger: 'blur'}">
         <el-input v-model="form.title"></el-input>
       </el-form-item>
-      <el-form-item label="新闻内容">
+      <el-form-item label="新闻内容"
+                    prop="content"
+                    :rules="{required: true, message: '内容不能为空', trigger: 'blur'}">>
         <quill-editor
           v-model="form.content"
           ref="myQuillEditor"
@@ -16,7 +24,9 @@
         >
         </quill-editor>
       </el-form-item>
-      <el-form-item label="作者">
+      <el-form-item label="作者"
+                    prop="author"
+                    :rules="{required: true, message: '必须选择', trigger: 'blur'}">
         <el-select v-model="form.author" placeholder="请选择">
           <el-option
             v-for="item in users"
@@ -26,7 +36,9 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="分类">
+      <el-form-item label="分类"
+                    prop="catagory"
+                    :rules="{required: true, message: '必须选择', trigger: 'blur'}">
         <el-select v-model="form.catagory" placeholder="请选择">
           <el-option
             v-for="item in catagories"
@@ -43,10 +55,10 @@
 
 <script>
   import ImgUpload from '../../components/imgUpload'
-  import 'quill/dist/quill.core.css'
   import 'quill/dist/quill.snow.css'
-  import 'quill/dist/quill.bubble.css'
-  import { quillEditor } from 'vue-quill-editor'
+  import { quillEditor, Quill } from 'vue-quill-editor'
+  import {container, ImageExtend, QuillWatch} from 'quill-image-extend-module'
+  Quill.register('modules/ImageExtend', ImageExtend)
   import axios from 'axios'
   export default {
     data() {
@@ -61,13 +73,28 @@
         },
         users: [],
         catagories: [],
+        token: '',
         // 富文本框参数设置
         editorOption: {
-          uploadConfig: {
-            token: '',
-            action: 'https://upload-z1.qiniup.com',
-            res: (respnse) => {
-              return respnse.url
+          modules: {
+            ImageExtend: {
+              loading: true,
+              name: 'file',
+              action: 'https://upload-z1.qiniup.com',
+              change: (xhr, formData) => {
+                 formData.append('token', this.token)
+              },
+              response: (res) => {
+                return res.url
+              }
+            },
+            toolbar: {
+              container: container,
+              handlers: {
+                'image': function () {
+                  QuillWatch.emit(this.quill.id)
+                }
+              }
             }
           }
         }
@@ -81,7 +108,7 @@
     methods: {
       getToken() {
         axios.get('http://upload.yaojunrong.com/getToken').then(res => {
-          this.editorOption.uploadConfig.token = res.data.data
+          this.token = res.data.data
         })
       },
       getUser() {
