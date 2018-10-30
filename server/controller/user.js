@@ -105,11 +105,13 @@ router.post('/login', (req, res, next) => {
             };
             let token = jwt.sign(userInfo, tokenConfig.secret, {expiresIn: tokenConfig.exp()});
             req.session.user = data;
+            let newdata = data.toObject()
+            delete newdata.pwd
             res.json({
                 code: 200,
                 msg: '登录成功',
                 token,
-                data
+                data: newdata
             })
         }
     }).catch(err => {
